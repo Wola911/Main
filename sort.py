@@ -112,9 +112,9 @@ def remove_empty_folders():
 
 def main():
   
-    target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    # target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
     
-    # target_folder = sys.argv[1]
+    target_folder = sys.argv[1]
 
     process_folder(target_folder)
     
@@ -124,5 +124,5 @@ if __name__ == "__main__":
     
     main()
    
-    # remove_empty_folders()
+    remove_empty_folders()
     

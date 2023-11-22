@@ -62,16 +62,21 @@ def process_folder(folder_path):
                 up_path2 = os.path.join(folder_path, extract_path)
                 if not os.path.exists(up_path2):
                     os.makedirs(up_path2)
-                shutil.unpack_archive(file_path, up_path2)
+                try:
+                
+                    shutil.unpack_archive(file_path, up_path2)
+                except Exception:
+
+                    print(f"Ahtung! Archive {extract_path} niht raspakovivatsya!")
                 shutil.move(file_path, up_path2)
                 continue
             else:
                 destination = 'unknown'
-                unknown_folder = os.path.join(destination, 'unknown_files')
+                unknown_folder = os.path.join(folder_path, destination)
                 if not os.path.exists(unknown_folder):
                     os.makedirs(unknown_folder)
                 destination_path = os.path.join(unknown_folder, normalized_name)
-                shutil.move(file_path, destination_path)
+                shutil.move(file_path, unknown_folder)
                 continue
 
             destination_path = os.path.join(destination, normalized_name)
@@ -107,16 +112,17 @@ def remove_empty_folders():
 
 def main():
   
-    # target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
     
-    target_folder = sys.argv[1]
+    # target_folder = sys.argv[1]
 
     process_folder(target_folder)
     
 
 
 if __name__ == "__main__":
+    
     main()
    
-    remove_empty_folders()
+    # remove_empty_folders()
     

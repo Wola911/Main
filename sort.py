@@ -94,7 +94,10 @@ def process_folder(folder_path):
     #         if not os.listdir(dir_path):
     #             os.rmdir(dir_path)
 
-def remove_empty_folders(folder_path):
+def remove_empty_folders():
+
+    folder_path = sys.argv[1]
+
     # print(f"11{folder_path}")
     for root, dirs, files in os.walk(folder_path, topdown=False):
         for dir in dirs:
@@ -103,18 +106,17 @@ def remove_empty_folders(folder_path):
                 os.rmdir(dir_path)
 
 def main():
-    # target_folder = input("Введіть шлях до папки для сортування: ")
-    # target_folder ="C:\\TEST"
-    # target_folder ="\\user\\Desktop\\Мотлох"
-    # target_folder ="C:/user/Desktop/Мотлох"
-    target_folder ="\\user\\Desktop\\Мотлох"
+  
     # target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    
+    target_folder = sys.argv[1]
+
     process_folder(target_folder)
     
 
 
 if __name__ == "__main__":
     main()
-    target_folder ="\\user\\Desktop\\Мотлох"
-    remove_empty_folders(target_folder)
+   
+    remove_empty_folders()
     

@@ -41,8 +41,9 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
             normalized_name = normalize(file)
 
             # if os.path.dirname(file_path) in ["archives", "video", "audio", "documents", "images"]:
-            #     continue
-            if "\\archives\\" in file_path or "\\video\\" in file_path or "\\audio\\" in file_path or "\\documents\\" in file_path or "\\images\\":
+            match = re.search(r"(?i)\\(archives|video|audio|documents|images|unknown)\\", file_path)
+
+            if match:
                 continue
 
             if extension.lower() in ['.jpg', '.jpeg', '.png', '.svg']:
@@ -70,7 +71,7 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
                 try:
                     shutil.move(file_path, up_path2)
                 except Exception:
-                    continue
+                    a = 0
                 known_extensions.add(extension.lower())
                 continue
             else:
@@ -82,7 +83,7 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
                 try:
                     shutil.move(file_path, unknown_folder)
                 except Exception:
-                    continue
+                    a = 0
                 unknown_extensions.add(extension.lower())
                 continue
 
@@ -95,14 +96,10 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
                 os.makedirs(up_path)
 
             try:
-                
                 shutil.move(file_path, new_path)
             except Exception:
                     print(f"Блын! Шо-та пашло не такЪ!")
 
-            # normalized_name_1 = normalized_name.replace("\\", "")
-
-            # category_counts[destination] += os.path.join(normalized_name_1,  "; ")
             category_counts[destination].add(normalized_name)
             known_extensions.add(extension.lower())
 

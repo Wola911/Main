@@ -31,14 +31,19 @@ def normalize(filename):
     return filename
 
 def process_folder(folder_path, category_counts, known_extensions, unknown_extensions):
+    
     for root, dirs, files in os.walk(folder_path):
+              
         for file in files:
+
             file_path = os.path.join(root, file)
             _, extension = os.path.splitext(file)
             normalized_name = normalize(file)
 
-            if file_path in ["archives", "video", "audio", "documents", "images"]:
-                return
+            # if os.path.dirname(file_path) in ["archives", "video", "audio", "documents", "images"]:
+            #     continue
+            if "\\archives\\" in file_path or "\\video\\" in file_path or "\\audio\\" in file_path or "\\documents\\" in file_path or "\\images\\":
+                continue
 
             if extension.lower() in ['.jpg', '.jpeg', '.png', '.svg']:
                 destination = 'images'
@@ -62,7 +67,10 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
                     shutil.unpack_archive(file_path, up_path2)
                 except Exception:
                     print(f"Achtung! Archive {extract_path} nicht entpackt!")
-                shutil.move(file_path, up_path2)
+                try:
+                    shutil.move(file_path, up_path2)
+                except Exception:
+                    continue
                 known_extensions.add(extension.lower())
                 continue
             else:
@@ -71,7 +79,10 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
                 if not os.path.exists(unknown_folder):
                     os.makedirs(unknown_folder)
                 destination_path = os.path.join(unknown_folder, normalized_name)
-                shutil.move(file_path, unknown_folder)
+                try:
+                    shutil.move(file_path, unknown_folder)
+                except Exception:
+                    continue
                 unknown_extensions.add(extension.lower())
                 continue
 
@@ -83,8 +94,16 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
             if not os.path.exists(up_path):
                 os.makedirs(up_path)
 
-            shutil.move(file_path, new_path)
-            category_counts[destination] += os.path.join(normalized_name,  "; ")
+            try:
+                
+                shutil.move(file_path, new_path)
+            except Exception:
+                    print(f"Блын! Шо-та пашло не такЪ!")
+
+            # normalized_name_1 = normalized_name.replace("\\", "")
+
+            # category_counts[destination] += os.path.join(normalized_name_1,  "; ")
+            category_counts[destination].add(normalized_name)
             known_extensions.add(extension.lower())
 
     for dir in dirs:
@@ -92,8 +111,8 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
         process_folder(dir_path, category_counts, known_extensions, unknown_extensions)
 
 def remove_empty_folders():
-    folder_path = sys.argv[1]
-    # folder_path ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    # folder_path = sys.argv[1]
+    folder_path ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
 
     for root, dirs, files in os.walk(folder_path, topdown=False):
         for dir in dirs:
@@ -118,9 +137,10 @@ def print_results(category_counts, known_extensions, unknown_extensions):
 def main():
  
 
-    target_folder = sys.argv[1]
-    # target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
-    category_counts = defaultdict(str)
+    # target_folder = sys.argv[1]
+    target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    # category_counts = defaultdict(str)
+    category_counts = defaultdict(set)
     known_extensions = set()
     unknown_extensions = set()
 

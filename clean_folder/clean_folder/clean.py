@@ -108,8 +108,8 @@ def process_folder(folder_path, category_counts, known_extensions, unknown_exten
         process_folder(dir_path, category_counts, known_extensions, unknown_extensions)
 
 def remove_empty_folders():
-    # folder_path = sys.argv[1]
-    folder_path ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    folder_path = sys.argv[1]
+    # folder_path ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
 
     for root, dirs, files in os.walk(folder_path, topdown=False):
         for dir in dirs:
@@ -134,8 +134,8 @@ def print_results(category_counts, known_extensions, unknown_extensions):
 def main():
  
 
-    # target_folder = sys.argv[1]
-    target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
+    target_folder = sys.argv[1]
+    # target_folder ="\\Users\\Zakharchenko\\Desktop\\Мотлох"
     
     category_counts = defaultdict(set)
     known_extensions = set()

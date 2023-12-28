@@ -4,34 +4,12 @@ def get_birthdays_per_week(users):
     
     week_dict = {0:"Monday", 1:"Tuesday", 2:"Wednesday", 3:"Thursday", 4:"Friday"}
     names_dict = {0:[], 1:[], 2:[], 3:[], 4:[]}
-
-    print("START")
-    print(users)
-
-    
-
-
-
-    # users_new = {}
     users_dict = {}
-
-    # m_monday = []
-    # m_tuesday = []
-    # m_wednesday = []
-    # m_thursday = []
-    # m_friday = []
 
     if len(users) == 0:
         return users_dict
 
     today = date.today()
-    # n_week = today.weekday()
-
-    # l_set = 5 - this_week
-    # l_sun = 6 - this_week
-    # end_next_week = l_sun + 5
-
-   
 
     for i in range(0, 7):
 
@@ -55,28 +33,14 @@ def get_birthdays_per_week(users):
 
     users = users_dict
 
-    print(users_dict)
-    print("FINISH")
-
     return users
 
 
 if __name__ == "__main__":
-    # users = [
-    #     {"name": "Jan Koum", "birthday": datetime(1976, 1, 1).date()},
-    # ]
-    
     users = [
-            {
-                "name": "John",
-                "birthday": (date.today() + timedelta(days=4)),
-            },
-            # {
-            #     "name": "Doe",
-            #     "birthday": (self.today + timedelta(days=6)).date(),
-            # },
-            # {"name": "Alice", "birthday": (self.today + timedelta(days=3)).date()},
+        {"name": "Jan Koum", "birthday": datetime(1976, 1, 1).date()},
     ]
+
     result = get_birthdays_per_week(users)
     print(result)
     # Виводимо результат

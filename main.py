@@ -1,54 +1,76 @@
-from datetime import date, datetime, timedelta
+def input_error(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except KeyError:
+            return "Enter user name"
+        except ValueError:
+            return "Give me name and phone please"
+        except IndexError:
+            return "User not found"
+
+    return wrapper
 
 
-def get_birthdays_per_week(users):
-    week_dict = {
-        0: "Monday",
-        1: "Tuesday",
-        2: "Wednesday",
-        3: "Thursday",
-        4: "Friday",
-    }
-    names_dict = {0: [], 1: [], 2: [], 3: [], 4: []}
-    users_dict = {}
+class ContactBot:
+    def __init__(self):
+        self.contacts = {}
 
-    if len(users) == 0:
-        return users_dict
+    @input_error
+    def hello(self):
+        return "How can I help you?"
 
-    today = date.today()
+    @input_error
+    def add(self, *args):
+        name, phone = args
+        self.contacts[name] = phone
+        return f"Contact {name} added with phone {phone}"
 
-    for i in range(0, 7):
+    @input_error
+    def change(self, *args):
+        name, phone = args
+        self.contacts[name] = phone
+        return f"Phone number for {name} changed to {phone}"
 
-        m_date = today + timedelta(days=i)
-        m_weekday = m_date.weekday()
-        for user in users:
+    @input_error
+    def phone(self, *args):
+        name, = args
+        return f"Phone number for {name}: {self.contacts[name]}"
 
-            m_name = user["name"]
-            m_birthday = user["birthday"]
-            if (m_birthday.month == m_date.month and
-                    m_birthday.day == m_date.day):
-                if m_weekday == 5 or m_weekday == 6:
-                    names_dict[0].append(m_name)
-                else:
-                    names_dict[m_weekday].append(m_name)
+    @input_error
+    def show_all(self):
+        return "\n".join([f"{name}: {phone}" for name,
+                          phone in self.contacts.items()])
 
-        if (not (m_weekday == 5 or m_weekday == 6) and
-                len(names_dict[m_weekday])) > 0:
-            new_dict = {week_dict[m_weekday]: names_dict[m_weekday]}
-            users_dict.update(new_dict)
+    def exit(self):
+        return "Good bye!"
 
-    users = users_dict
 
-    return users
+def main():
+    bot = ContactBot()
+
+    while True:
+        command = input("Enter command: ").lower()
+
+        if command == "good bye" or command == "close" or command == "exit":
+            print(bot.exit())
+            break
+        elif command == "hello":
+            print(bot.hello())
+        elif command.startswith("add"):
+            _, *args = command.split()
+            print(bot.add(*args))
+        elif command.startswith("change"):
+            _, *args = command.split()
+            print(bot.change(*args))
+        elif command.startswith("phone"):
+            _, *args = command.split()
+            print(bot.phone(*args))
+        elif command == "show all":
+            print(bot.show_all())
+        else:
+            print("Unknown command. Please try again.")
 
 
 if __name__ == "__main__":
-    users = [
-        {"name": "Jan Koum", "birthday": datetime(1976, 1, 1).date()},
-    ]
-
-    result = get_birthdays_per_week(users)
-    print(result)
-    # Виводимо результат
-    for day_name, names in result.items():
-        print(f"{day_name}: {', '.join(names)}")
+    main()

@@ -21,26 +21,34 @@ class ContactBot:
         return "How can I help you?"
 
     @input_error
-    def add(self, *args):
+    def add(self, command):
+        _, *args = command.split()
         name, phone = args
-        self.contacts[name] = phone
+        if name in self.contacts.keys():
+            name = f'{name}2'
+        new_contact = {name: phone}
+        self.contacts = dict(self.contacts | new_contact)
         return f"Contact {name} added with phone {phone}"
 
     @input_error
-    def change(self, *args):
+    def change(self, command):
+        _, *args = command.split()
         name, phone = args
-        self.contacts[name] = phone
-        return f"Phone number for {name} changed to {phone}"
+        if name in self.contacts:
+            self.contacts[name] = phone
+            return f"Phone number for {name} changed to {phone}"
+        else:
+            return f"Contact {name} not found. Use 'add' to create a new contact."
 
     @input_error
-    def phone(self, *args):
+    def phone(self, command):
+        _, *args = command.split()
         name, = args
-        return f"Phone number for {name}: {self.contacts[name]}"
+        return f"Phone number for {name}: {self.contacts.get(name, 'Contact not found')}"
 
     @input_error
     def show_all(self):
-        return "\n".join([f"{name}: {phone}" for name,
-                          phone in self.contacts.items()])
+        return "\n".join([f"{name}: {phone}" for name, phone in self.contacts.items()])
 
     def exit(self):
         return "Good bye!"
@@ -52,20 +60,17 @@ def main():
     while True:
         command = input("Enter command: ").lower()
 
-        if command == "good bye" or command == "close" or command == "exit":
+        if command in {"good bye", "close", "exit"}:
             print(bot.exit())
             break
         elif command == "hello":
             print(bot.hello())
-        elif command.startswith("add"):
-            _, *args = command.split()
-            print(bot.add(*args))
-        elif command.startswith("change"):
-            _, *args = command.split()
-            print(bot.change(*args))
-        elif command.startswith("phone"):
-            _, *args = command.split()
-            print(bot.phone(*args))
+        elif command == "add":
+            print(bot.add(command))
+        elif command == "change":
+            print(bot.change(command))
+        elif command == "phone":
+            print(bot.phone(command))
         elif command == "show all":
             print(bot.show_all())
         else:
